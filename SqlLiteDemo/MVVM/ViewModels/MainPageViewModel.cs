@@ -36,8 +36,13 @@ namespace SqlLiteDemo.MVVM.ViewModels
 
         public ICommand AddOrUpdateCommand => new Command(() =>
         {
-            App.CustomerRepository.AddOrUpdate(currentCustomer);
+
+
+            App.CustomerRepository.Save(currentCustomer);
+            App.OrderRepository.Save(new Order { CustomerID = currentCustomer.Id, OrderDate = DateTime.Now });
+            var orders = App.OrderRepository.GetAll();
             refresh();
+            currentCustomer= generateNewCustomer();
         });
 
         private void refresh()
@@ -45,6 +50,7 @@ namespace SqlLiteDemo.MVVM.ViewModels
             customers.Clear();
            // var customersdb = App.CustomerRepository.GetAll(c => c.Name.StartsWith("V"));
             var customersdb = App.CustomerRepository.GetAll();
+            
             customersdb!.ForEach(c => customers.Add(c));  
             currentCustomer = generateNewCustomer();
             
@@ -52,7 +58,7 @@ namespace SqlLiteDemo.MVVM.ViewModels
 
         public ICommand DeleteCommand => new Command(() =>
         {
-            App.CustomerRepository.Delete(currentCustomer.Id);
+            App.CustomerRepository.Delete(currentCustomer);
 
             refresh();
         });

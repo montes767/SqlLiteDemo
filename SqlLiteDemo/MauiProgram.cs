@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using SqlLiteDemo.Abstractions;
+using SqlLiteDemo.MVVM.Models;
 using SqlLiteDemo.Repositories;
 
 namespace SqlLiteDemo
@@ -15,7 +17,8 @@ namespace SqlLiteDemo
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            builder.Services.AddSingleton<CustomerRepository>();
+            builder.Services.AddSingleton<IBaseRepository<Customer>, BaseRepository<Customer>>(); 
+            builder.Services.AddSingleton<IBaseRepository<Order>, BaseRepository<Order>>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
