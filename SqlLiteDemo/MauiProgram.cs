@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SqlLiteDemo.Abstractions;
 using SqlLiteDemo.MVVM.Models;
 using SqlLiteDemo.Repositories;
@@ -19,6 +20,7 @@ namespace SqlLiteDemo
                 });
             builder.Services.AddSingleton<IBaseRepository<Customer>, BaseRepository<Customer>>(); 
             builder.Services.AddSingleton<IBaseRepository<Order>, BaseRepository<Order>>();
+            builder.Services.AddSingleton<IBaseRepository<Passport>, BaseRepository<Passport>>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

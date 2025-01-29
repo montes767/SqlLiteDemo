@@ -27,20 +27,32 @@ namespace SqlLiteDemo.MVVM.ViewModels
 
         public Customer generateNewCustomer()
         {
-            return new Faker<Customer>().RuleFor(c => c.Name, f => f.Person.FirstName)
+            var customer= new Faker<Customer>().RuleFor(c => c.Name, f => f.Person.FirstName)
                 .RuleFor(c => c.Address, f => f.Person.Address.Street)
                 .RuleFor(c=> c.Phone, f => f.Person.Phone)
                 .Generate();
-
+            customer.Passport = new List<Passport>
+            {
+                new Passport
+            {
+                ExpirationDate = DateTime.Now.AddDays(60)
+            },
+                new Passport
+            {
+                   ExpirationDate= DateTime.Now.AddDays(120)
+            }};
+            return customer;
+            
         }
 
         public ICommand AddOrUpdateCommand => new Command(() =>
         {
 
 
-            App.CustomerRepository.Save(currentCustomer);
-            App.OrderRepository.Save(new Order { CustomerID = currentCustomer.Id, OrderDate = DateTime.Now });
-            var orders = App.OrderRepository.GetAll();
+            App.CustomerRepository.SaveWithChildren(currentCustomer);
+            //App.OrderRepository.Save(new Order { CustomerID = currentCustomer.Id, OrderDate = DateTime.Now });
+            //var orders = App.OrderRepository.GetAll();
+            var passport= App.PassportRepository.GetAll();
             refresh();
             currentCustomer= generateNewCustomer();
         });

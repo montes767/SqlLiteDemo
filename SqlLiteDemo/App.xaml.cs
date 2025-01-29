@@ -14,12 +14,16 @@ namespace SqlLiteDemo
 
         public static IBaseRepository<Order> OrderRepository { get; set; }
 
-        public App(IBaseRepository<Customer> cr, IBaseRepository<Order> or)
+        public static IBaseRepository<Passport> PassportRepository { get; set; }
+
+        public App(IBaseRepository<Customer> cr, IBaseRepository<Order> or, IBaseRepository<Passport> pr)
         {
             InitializeComponent();
 
+
             CustomerRepository = cr;
             OrderRepository = or;
+            PassportRepository = pr;
 
             MainPage = new MainPage();
         }

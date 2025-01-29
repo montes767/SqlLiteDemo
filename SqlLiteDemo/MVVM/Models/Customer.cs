@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Attributes;
 using SqlLiteDemo.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,7 @@ namespace SqlLiteDemo.MVVM.Models
         public int Age { get; set; }
         [Ignore]
         public bool IsYoung => Age < 18;
+        [ManyToMany(typeof(CustomerPassport), CascadeOperations=CascadeOperation.All)]
+        public List<Passport> Passport { get; set; }= new List<Passport>();
     }
 }

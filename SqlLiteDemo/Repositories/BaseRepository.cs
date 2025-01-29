@@ -1,5 +1,7 @@
 ﻿using SQLite;
+using SQLiteNetExtensions.Extensions;
 using SqlLiteDemo.Abstractions;
+using SqlLiteDemo.MVVM.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,21 +16,29 @@ namespace SqlLiteDemo.Repositories
         /// <summary>
         /// Connection to database
         /// </summary>
-        private SQLiteConnection _connection = 
-            new SQLiteConnection(Constants.DatabasePath, Constants.flags);
+        private static SQLiteConnection _connection;
+            
+        static BaseRepository(){
+           _connection= new SQLiteConnection(Constants.DatabasePath, Constants.flags);
+         
+
+
+
+
 
         public string StatusMessage { get; set; }= string.Empty;
 
         public BaseRepository()
         {
             _connection.CreateTable<T>();
+            _connection.CreateTable<CustomerPassport>();
         }
 
-        public void Delete(T item)
+        public void Delete(T item, bool recursive= true)
         {
             try
             {
-                _connection.Delete(item);
+                _connection.Delete(item, recursive);
             }
             catch (Exception ex)
             {
@@ -36,6 +46,7 @@ namespace SqlLiteDemo.Repositories
             }
         }
 
+        
         public void Dispose()
         {
             _connection.Close();
@@ -43,8 +54,8 @@ namespace SqlLiteDemo.Repositories
 
         public List<T> GetAll()
         {
-            
-                return _connection.Table<T>().ToList();
+
+            return _connection.GetAllWithChildren<T>();
            
         }
 
@@ -66,7 +77,29 @@ namespace SqlLiteDemo.Repositories
             return _connection.Table<T>().FirstOrDefault(x => x.Id == id);
         }
 
-        public void Save(T item)
+        public void SaveWithChildren(T item, bool recursive=false)
+        {
+            try
+            {
+                if (item.Id == 0)
+                {
+                    _connection.InsertWithChildren(item, recursive);
+                    StatusMessage = $"Added: ";
+                }
+                else
+                {
+                    _connection.UpdateWithChildren(item);
+                    StatusMessage = $"Updated:";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error: {ex}";
+            }
+        
+            }
+
+            public void Save(T item)
         {
             try
             {

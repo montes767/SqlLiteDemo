@@ -17,6 +17,11 @@ namespace SqlLiteDemo.Repositories
             throw new NotImplementedException();
         }
 
+        public void Delete(Customer item, bool recursive = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -43,6 +48,11 @@ namespace SqlLiteDemo.Repositories
         }
 
         public void Save(Customer item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveWithChildren(Customer item, bool recursive = false)
         {
             throw new NotImplementedException();
         }
